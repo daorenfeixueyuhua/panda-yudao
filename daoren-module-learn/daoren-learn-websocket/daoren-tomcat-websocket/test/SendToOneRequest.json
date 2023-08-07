@@ -1,0 +1,8 @@
+{
+  "type": "SEND_TO_ONE_REQUEST",
+  "body": {
+    "toUser": "番茄",
+    "msgId": "eaef4a3c-35dd-46ee-b548-f9c4eb6396fe",
+    "content": "我是一条单聊消息"
+  }
+}
