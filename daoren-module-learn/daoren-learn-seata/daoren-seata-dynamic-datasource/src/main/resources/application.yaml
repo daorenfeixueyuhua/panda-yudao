@@ -1,0 +1,88 @@
+server:
+  port: 8081 # 端口
+
+spring:
+  application:
+    name: multi-datasource-service  # 应用名
+
+  datasource:
+    druid:
+      web-stat-filter:
+        enabled: true
+      stat-view-servlet:
+        enabled: true
+        allow:
+        url-pattern: /druid/*
+        login-username:
+        login-password:
+      filter:
+        stat:
+          enabled: true
+          log-slow-sql: true
+          slow-sql-millis: 100
+          merge-sql: true
+        wall:
+          config:
+            multi-statement-allow: true
+      validation-query: select 1
+    # dynamic-datasource-spring-boot-starter 动态数据源的配配项，对应 DynamicDataSourceProperties 类
+    dynamic:
+      druid:
+        initial-size: 5
+        min-idle: 10
+        max-active: 20
+        max-wait: 600000
+        time-between-eviction-runs-millis: 60000
+        min-evictable-idle-time-millis: 300000
+        max-evictable-idle-time-millis: 900000
+        validation-query: select 1
+        test-while-idle: true
+        test-on-borrow: false
+        test-on-return: false
+        filters: stat,wall,cn.daoren.druid.framework.log.filter.PandaDruidFilter
+      primary: order-ds # 设置默认的数据源或者数据源组，默认值即为 master
+      datasource:
+        # 订单 order 数据源配置
+        order-ds:
+          url: jdbc:mysql://127.0.0.1:30336/seata_order
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          username: root
+          password: 123456
+        # 账户 pay 数据源配置
+        amount-ds:
+          url: jdbc:mysql://127.0.0.1:30336/seata_amount
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          username: root
+          password: 123456
+        # 库存 storage 数据源配置
+        storage-ds:
+          url: jdbc:mysql://127.0.0.1:30336/seata_storage
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          username: root
+          password: 123456
+      seata: true # 是否启动对 Seata 的集成
+
+  flyway:
+    enabled: true
+    # 非空数据库初始化Flyway时需要打开此开关进行Baseline操作
+    baseline-on-migrate: true
+    # 是否可以无序执行。开发环境最好开启 outOfOrder, 生产环境关闭 outOfOrder
+    out-of-order: true
+    # 迁移前校验 SQL 文件是否存在问题
+    validate-on-migrate: false
+    # 这里写主库路径，然后在配置类中转换
+    locations: classpath:db/order-ds
+    table: flyway_schema_history
+
+# Seata 配置项，对应 SeataProperties 类
+seata:
+  application-id: ${spring.application.name} # Seata 应用编号，默认为 ${spring.application.name}
+  tx-service-group: ${spring.application.name}-group # Seata 事务组编号，用于 TC 集群名
+  # 服务配置项，对应 ServiceProperties 类
+  service:
+    # 虚拟组和分组的映射
+    vgroup-mapping:
+      multi-datasource-service-group: default
+    # 分组和 Seata 服务的映射
+    grouplist:
+      default: 127.0.0.1:8091

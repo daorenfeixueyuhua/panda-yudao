@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.daoren.seata.mapper.AccountMapper">
+
+    <resultMap id="BaseResultMap" type="cn.daoren.seata.domain.entity.Account">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="balance" column="balance" jdbcType="DOUBLE"/>
+        <result property="lastUpdateTime" column="last_update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,balance,last_update_time
+    </sql>
+</mapper>
