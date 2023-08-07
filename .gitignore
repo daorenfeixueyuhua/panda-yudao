@@ -47,4 +47,4 @@ build/
 /temp/
 
 ### 热部署配置文件 ###
-/*/resources/rebel.xml
+**/rebel.xml
