@@ -1,0 +1,8 @@
+spring:
+  task:
+    scheduling:
+      thread-name-prefix: job-scheduler
+      pool:
+        size: 10
+      shutdown:
+        await-termination: true
