@@ -1,0 +1,4 @@
+### custom properties
+custom:
+  serviceName: ${spring.application.name}
+  servicePort: ${server.port}

@@ -1,0 +1,12 @@
+
+### GET
+GET http://localhost:8081/grpc-biz/demo/get?id=1683335220
+
+### CREATE
+POST http://localhost:8081/grpc-biz/demo/create
+Content-Type: application/x-www-form-urlencoded
+
+name=123&gender=2
+
+### Service
+GET http://localhost:8081/grpc-biz/demo/service
