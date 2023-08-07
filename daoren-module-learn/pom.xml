@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cn.daoren</groupId>
+        <artifactId>panda-yudao</artifactId>
+        <version>${revision}</version>
+
+    </parent>
+
+    <artifactId>daoren-module-learn</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <!--Nacos-->
+        <module>daoren-learn-nacos</module>
+        <module>daoren-learn-grpc</module>
+        <module>daoren-learn-datasource-pool</module>
+        <!--WebSocket-->
+        <module>daoren-learn-websocket</module>
+        <module>daoren-learn-job</module>
+        <!--监控-->
+        <module>daoren-learn-boot-admin</module>
+        <module>daoren-promethus-grafana</module>
+        <module>daoren-learn-webflux</module>
+        <!--工作流相关-->
+        <module>daoren-learn-bpm</module>
+        <module>daoren-learn-es</module>
+        <!--锁相关-->
+        <module>daoren-learn-lock</module>
+        <module>daoren-learn-fast-dev</module>
+        <module>daoren-learn-seata</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+</project>
