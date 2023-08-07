@@ -1,0 +1,60 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis
+  labels:
+    name: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: redis
+  serviceName: redis
+  template:
+    metadata:
+      name: redis
+      labels:
+        name: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 6379
+          volumeMounts:
+            - mountPath: /data
+              name: redis-data
+      volumes:
+        - name: redis-data
+          persistentVolumeClaim:
+            claimName: redis
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  labels:
+    name: redis
+spec:
+  type: NodePort
+  ports:
+    - port: 6379
+      targetPort: 6379
+      nodePort: 30079
+  selector:
+    name: redis
+

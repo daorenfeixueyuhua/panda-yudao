@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mqnamesrv
+  labels:
+    app: mqnamesrv
+spec:
+  serviceName: mqnamesrv
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mqnamesrv
+    spec:
+      containers:
+        - name: mqnamesrv
+          image: apacherocketmq/rocketmq:latest
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+          args:
+            - mqnamesrv
+          ports:
+            - containerPort: 9876
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1Gi
+            requests:
+              cpu: 250m
+              memory: 512Mi
+  #      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: mqnamesrv
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mqnamesrv
+spec:
+  selector:
+    app: mqnamesrv
+  ports:
+    - port: 9876
+      targetPort: 9876
+      nodePort: 30076
+  type: NodePort

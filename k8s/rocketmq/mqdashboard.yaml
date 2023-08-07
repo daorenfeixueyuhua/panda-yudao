@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mqdashboard
+spec:
+  serviceName: mqdashboard
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mqdashboard
+  template:
+    metadata:
+      labels:
+        app: mqdashboard
+    spec:
+      containers:
+        - name: mqdashboard
+          image: apacherocketmq/rocketmq-dashboard:latest
+          ports:
+            - name: http-8080
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: JAVA_OPTS
+              value: >-
+                -Drocketmq.namesrv.addr=mqnamesrv:9876
+                -Dcom.rocketmq.sendMessageWithVIPChannel=false
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1Gi
+            requests:
+              cpu: 50m
+              memory: 512Mi
+#          imagePullPolicy: Always
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mqdashboard
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30080
+  selector:
+    app: mqdashboard
+  type: NodePort

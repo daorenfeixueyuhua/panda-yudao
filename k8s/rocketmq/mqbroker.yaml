@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mqbroker
+spec:
+  serviceName: mqbroker
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mqbroker
+  template:
+    metadata:
+      labels:
+        app: mqbroker
+    spec:
+      containers:
+        - name: mqbroker
+          image: apacherocketmq/rocketmq:latest
+          command: [ "sh","mqbroker", "-n","mqnamesrv:9876", "-c", "/conf/broker.conf" ]
+          imagePullPolicy: Always
+          ports:
+            - name: tcp-vip-10909
+              containerPort: 10909
+              protocol: TCP
+            - name: tcp-main-10911
+              containerPort: 10911
+              protocol: TCP
+            - name: tcp-ha-10912
+              containerPort: 10912
+              protocol: TCP
+          env:
+            - name: NAMESRV_ADDR
+              value: "mqnamesrv:9876"
+          volumeMounts:
+            - mountPath: /conf
+              name: broker-conf
+      volumes:
+        - name: broker-conf
+          configMap:
+            name: rocketmq-broker-config
+            items:
+              - key: broker.conf
+                path: broker.conf
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mqbroker
+spec:
+  selector:
+    app: mqbroker
+  ports:
+    - port: 10911
+      targetPort: 10911
+      nodePort: 30911
+  type: NodePort
+
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: rocketmq-broker-config
+data:
+  broker.conf: |
+    brokerClusterName = DefaultCluster
+    brokerName = broker-a
+    brokerId = 0
+    deleteWhen = 04
+    fileReservedTime = 48
+    brokerRole = ASYNC_MASTER
+    flushDiskType = ASYNC_FLUSH
+    brokerIP1=hostname -i
+    autoCreateTopicEnable=true

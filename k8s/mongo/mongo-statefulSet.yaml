@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo
+spec:
+  selector:
+    matchLabels:
+      app: mongo
+  serviceName: mongo
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+        - name: mongo
+          image: mongo
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: root
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              value: '123456'
+          args:
+            - mongod
+            - "--replSet"
+            - rs0
+            - "--bind_ip"
+            - 0.0.0.0
+            - --clusterAuthMode
+            - keyFile
+            - --keyFile
+            - /data/config/mongodb-keyfile
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - mountPath: /data/db
+              name: mongo-storage
+
+  volumeClaimTemplates:
+    - metadata:
+        name: mongo-storage
+      spec:
+        storageClassName: mongo-fast
+        accessModes:
+          - ReadWriteMany
+        resources:
+          requests:
+            storage: 10Gi

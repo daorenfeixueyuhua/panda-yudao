@@ -1,0 +1,40 @@
+apiVersion: apps/v1 # api版本
+kind: StatefulSet # 副本控制器RC
+metadata:
+  name: mysql # 对象名称，全局唯一
+  labels: # 标签
+    app: mysql
+spec:
+  replicas: 1 # 预期的副本数量
+  selector:
+    matchLabels:
+      app: mysql
+  serviceName: mysql
+  template: # Pod 模板
+    metadata:
+      name: mysql
+      labels:
+        app: mysql
+    spec:
+      containers: # 定义容器
+        - image: mysql:5.7
+          name: mysql
+          ports:
+            - name: mysql
+              containerPort: 3306 # 容器应用监听的端口号
+          env: # 注入容器内的环境变量
+            - name: MYSQL_ROOT_PASSWORD
+              value: "123456"
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: mysql-storage
+  volumeClaimTemplates:
+    - metadata:
+        name: mysql-storage
+      spec:
+        accessModes:
+          - ReadWriteMany
+        storageClassName: "hostpath"
+        resources:
+          requests:
+            storage: 10Gi
