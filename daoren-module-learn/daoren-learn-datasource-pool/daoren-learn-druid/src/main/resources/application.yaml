@@ -1,0 +1,59 @@
+yudao:
+  info:
+    base-package: cn.daoren.druid
+
+--- ### 数据源配置
+spring:
+  # datasource 数据源配置内容
+  datasource:
+    druid:
+      web-stat-filter:
+        enabled: true
+      stat-view-servlet:
+        enabled: true
+        allow:
+        url-pattern: /druid/*
+        login-username:
+        login-password:
+      filter:
+        stat:
+          enabled: true
+          log-slow-sql: true
+          slow-sql-millis: 100
+          merge-sql: true
+        wall:
+          config:
+            multi-statement-allow: true
+      url: jdbc:mysql://daoren:30336/datasource_pool_dataset?useSSL=false&useUnicode=true&characterEncoding=UTF-8
+      username: root
+      password: 123456
+      validation-query: select 1
+      # 初始连接数
+      initial-size: 1
+      driver-class-name:
+#      validation-query-timeout: 1000
+#    dynamic:
+#      druid:
+#        initial-size: 5
+#        min-idle: 10
+#        max-active: 20
+#        max-wait: 600000
+#        time-between-eviction-runs-millis: 60000
+#        min-evictable-idle-time-millis: 300000
+#        max-evictable-idle-time-millis: 900000
+#        validation-query: select 1
+#        test-while-idle: true
+#        test-on-borrow: false
+#        test-on-return: false
+#        filters: stat,wall,cn.daoren.druid.framework.log.filter.PandaDruidFilter
+#      primary: master
+#      datasource:
+#        master:
+#          url: jdbc:mysql://daoren:30336/datasource_pool_dataset?useSSL=false&useUnicode=true&characterEncoding=UTF-8
+#          username: root
+#          password: 123456
+#        slave:
+#          url: jdbc:mysql://daoren:30336/datasource_pool_dataset?useSSL=false&useUnicode=true&characterEncoding=UTF-8
+#          username: root
+#          password: 123456
+

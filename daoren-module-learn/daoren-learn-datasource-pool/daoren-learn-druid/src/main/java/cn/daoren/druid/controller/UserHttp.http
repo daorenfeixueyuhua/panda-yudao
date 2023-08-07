@@ -1,0 +1,15 @@
+
+### GET
+GET http://localhost:81/users/query
+
+### Query One
+GET http://localhost:81/users/1
+
+### Save Or Update
+POST http://localhost:81/users/saveOrUpdate
+Content-Type: application/json
+
+{
+  "username": "panda",
+  "password": "123456"
+}

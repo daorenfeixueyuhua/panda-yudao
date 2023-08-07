@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: daoren-learn-datasource-pool
+  boot:
+    admin:
+      client:
+        url: http://localhost:8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+server:
+  port: 81
